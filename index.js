@@ -14,8 +14,11 @@ app.get("/audio/:id", async (req, res) => {
             { params: { itemIds: assetId } }
         );
 
-        const item = product.data[0];
-        if (!item) return res.json({ success: false });
+        const item = product.data?.data?.[0];
+
+        if (!item) {
+            return res.json({ success: false, error: "No item found" });
+        }
 
         const thumbRes = await axios.get(
             `https://thumbnails.roblox.com/v1/assets`,
@@ -28,7 +31,7 @@ app.get("/audio/:id", async (req, res) => {
             }
         );
 
-        const thumbData = thumbRes.data.data[0];
+        const thumbData = thumbRes.data?.data?.[0];
 
         res.json({
             success: true,
